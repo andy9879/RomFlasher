@@ -39,11 +39,14 @@ void setup()
   digitalWrite(romIO[5], LOW);
   digitalWrite(romIO[6], LOW);
   digitalWrite(romIO[7], LOW);
-  delay(10);
+  delay(100);
   digitalWrite(romWriteEnable, LOW);
-  delay(10);
+  delay(100);
   digitalWrite(romWriteEnable, HIGH);
+}
 
+void loop()
+{
   for (int i = 0; i < 8; i++)
   {
     pinMode(romIO[i], INPUT);
@@ -55,8 +58,6 @@ void setup()
   {
     Serial.print(digitalRead(romIO[i]));
   }
-}
-
-void loop()
-{
+  Serial.print("\n");
+  delay(200);
 }
