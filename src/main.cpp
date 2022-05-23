@@ -31,14 +31,13 @@ void writeToRam(uint8_t data)
     data = data >> 1;
   }
 
-  delay(5000);
+  delay(1000);
   digitalWrite(romWriteEnable, LOW);
-  delay(5000);
+  delay(1000);
   digitalWrite(romWriteEnable, HIGH);
 
   for (uint8_t i = 0; i < 8; i++)
   {
-
     digitalWrite(romIO[i], LOW);
   }
 }
@@ -46,10 +45,7 @@ void writeToRam(uint8_t data)
 void setup()
 {
   Serial.begin(9600);
-  delay(3000);
-  uint8_t test = 8;
-  test = test >> 2;
-  Serial.println(test);
+  delay(1000);
   Serial.println("Starting....");
   // put your setup code here, to run once:
   pinMode(incrementAddress1, OUTPUT);
@@ -64,7 +60,7 @@ void setup()
   digitalWrite(romWriteEnable, HIGH);
   delay(100);
 
-  writeToRam(0b0);
+  writeToRam(0b10000001);
 
   for (uint8_t i = 0; i < 8; i++)
   {
