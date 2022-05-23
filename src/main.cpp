@@ -20,7 +20,7 @@ void writeToRam(uint8_t data)
   for (uint8_t i = 0; i < 8; i++)
   {
     Serial.println(data % 2);
-    if (data % 2 == 0)
+    if (data % 2 == 1)
     {
       digitalWrite(romIO[i], HIGH);
     }
@@ -59,17 +59,12 @@ void setup()
   pinMode(romOutEnable, OUTPUT);
   pinMode(romWriteEnable, OUTPUT);
 
-  for (int i = 0; i < 8; i++)
-  {
-    pinMode(romIO[i], OUTPUT);
-  }
-
   digitalWrite(romChipEnable, LOW);
   digitalWrite(romOutEnable, HIGH);
   digitalWrite(romWriteEnable, HIGH);
   delay(100);
 
-  writeToRam(0b00000000);
+  writeToRam(0b0);
 
   for (uint8_t i = 0; i < 8; i++)
   {
