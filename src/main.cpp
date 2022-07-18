@@ -11,6 +11,7 @@ uint8_t romIO[8] = { 5, 6, 7, 8, 9, 10, 11, 12 };
 
 uint16_t currentAddress;
 
+
 void writeToRom(uint8_t data) {
 
   digitalWrite(romOutEnable, HIGH);
@@ -19,22 +20,18 @@ void writeToRom(uint8_t data) {
   for (uint8_t i = 0; i < 8; i++) {
     pinMode(romIO[i], OUTPUT);
   }
-  delay(100);
+  delay(1);
 
   for (int8_t i = 8; i >= 0; i--) {
     if (data % 2 == 1) {
       digitalWrite(romIO[i], HIGH);
-      Serial.print('1');
     } else {
       digitalWrite(romIO[i], LOW);
-      Serial.print('0');
     }
     data = data >> 1;
     //delay(1000);
   }
-  Serial.print('\n');
 
-  delay(10);
   digitalWrite(romWriteEnable, LOW);
   delay(10);
   digitalWrite(romWriteEnable, HIGH);
@@ -71,14 +68,14 @@ void incrementAddress() {
 
   for (int i = 0; i < 4; i++) {
     digitalWrite(incrementAddress1, HIGH);
-    delay(10);
+    delay(1);
     digitalWrite(incrementAddress1, LOW);
   }
 
   if ((0b1111111 & currentAddress) == 0b1111111) {
     for (int i = 0; i < 4; i++) {
       digitalWrite(incrementAddress2, HIGH);
-      delay(10);
+      delay(1);
       digitalWrite(incrementAddress2, LOW);
     }
   }
@@ -95,7 +92,7 @@ void clearAddress() {
 
 void setup() {
   delay(1000);
-  Serial.begin(9600);
+  Serial.begin(115200, SERIAL_8E1);
 
   Serial.println("Starting....");
   // put your setup code here, to run once:
@@ -116,15 +113,25 @@ void setup() {
   digitalWrite(romChipEnable, LOW);
   delay(10);
 
+  Serial.println("r");
 }
 
 void loop() {
 
   if (Serial.available() > 0) {
+    String command = Serial.readString();
 
-    Serial.print("I received: ");
-    Serial.println(Serial.readString());
+    if (command.charAt(0) == 'w') {
+      for (uint8_t i = 1; i < command.length();i++) {
+        writeToRom(command.charAt(i));
+        incrementAddress();
+      }
+
+      Serial.println("r");
+    }
+
   }
+
   // writeToRom(0xaa);
   // delay(5000);
   // Serial.print(readFromRom(), BIN);
@@ -134,5 +141,5 @@ void loop() {
   //   digitalWrite(incrementAddress1, LOW);
   // }
   // Serial.println("\n");
-  //delay(100);
+  // delay(100);
 }
